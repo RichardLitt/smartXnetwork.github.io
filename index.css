@@ -1,0 +1,213 @@
+body {
+    margin: 0;
+    background: #f3f4f7;
+    color: #5a6674;
+    font-size: 13px;
+    font-family: 'voces', sans-serif;
+    overflow: hidden;
+    height: 100%;
+}
+
+
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    position: absolute;
+    width: 550px;
+    left: 50%;
+    bottom: 0px;
+    height: 35px;
+    transform: translate(-50%);
+    font-family: 'voces', sans-serif;
+    font-size: 20px;
+    border-top: 1px solid lightgrey;
+    padding: 5px;
+}
+
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 50%;
+    font-family: 'voces', sans-serif;
+    padding-top: 5px;
+    font-size: 18px;
+}
+
+img {
+    font-size: 0.8em;
+    display: block;
+    font-style: italic;
+    max-width: 150px !important;
+    max-height: 150px !important;
+    border-radius: 100%;
+    box-shadow: 0 5px 25px 5px rgba(0, 0, 0, 0.2);
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+p {
+    font-size: 12px;
+    margin: 10px;
+    color: #888888;
+    font-weight: 300;
+}
+
+input {
+    width: 100%;
+    margin-bottom: 15px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    padding: 10px;
+    font-size: 15px;
+    -webkit-appearance: listitem;
+    font-family: 'voces', sans-serif;
+    font-weight: bold;
+}
+
+input[type="text"]:disabled {
+    background: #dddddd;
+}
+
+input[type="url"]:disabled {
+    background: #dddddd;
+}
+
+#output-header > p {
+    margin: 0;
+    font-style: italic;
+}
+
+#output {
+    padding-top: 1em;
+}
+
+#writerText {
+    padding-top: 0.5em;
+}
+
+pre {
+    text-align: center;
+}
+
+
+h1 {
+    position: relative;
+    text-align: center;
+    width: 550px;
+    right: 50%;
+    left: 50%;
+    transform: translate(-50%);
+    font-weight: bold;
+    overflow: auto;
+    padding: 10px;
+    margin: auto;
+}
+
+a {
+    text-align: center;
+}
+
+h2 {
+    position: relative;
+    text-align: center;
+    /* margin-top: 50px; */
+    font-size: 15px;
+    width: 550px;
+    right: 50%;
+    left: 50%;
+    transform: translate(-50%);
+    /* margin-bottom: 5px; */
+    /* top: 225px; */
+    overflow: auto;
+    padding: 10px;
+    margin: auto;
+}
+
+
+.column {
+    position: absolute;
+    text-align: left;
+    margin-top: 50px;
+    font-size: 15px;
+    width: 550px;
+    right: 50%;
+    left: 50%;
+    transform: translate(-50%);
+    top: 150px;
+    overflow: auto;
+    bottom: 50px;
+    margin-bottom: 50px;
+    padding: 5px;
+}
+
+h3 {
+    display: none;
+}
+
+h4 {
+    margin: 10px;
+}
+
+h5 {
+    margin: 10px;
+}
+
+hr {
+    border-top: 1px solid lightgrey;
+    margin-block-start: 20px;
+}
+
+/* Float four columns side by side */
+.hcolumn {
+    float: left;
+    width: 28%;
+    padding: 0 10px;
+}
+
+/* Remove extra left and right margins, due to padding */
+.hrow {
+    margin: 10px;
+    margin-bottom: 40px;
+}
+
+/* Clear floats after the columns */
+.hrow:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+    }
+}
+
+/* Style the counter cards */
+.card {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    padding: 3px;
+    text-align: center;
+    background-color: #f1f1f1;
+    margin-top: 5px;
+    height: 150px;
+}
