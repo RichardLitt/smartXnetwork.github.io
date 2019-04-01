@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-
 <html>
 <head>
     <meta charset="utf-8">
     <link href="index.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Voces" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor/dist/jsoneditor.min.js"></script>
     <!-- Font Awesome icons (Bootstrap, Foundation, and jQueryUI also supported) -->
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
-
 
     <link rel='shortcut icon' type='image/x-icon' href='./favicon.ico' />
 
@@ -16,38 +12,354 @@
     <meta name="description" content="Powered by IPFS, smartX is a socio-economic system with digital native identity and money to allow anyone to seamlessly
       create smart contracts and markets (aka tokens) for just about anything.">
 
-    <script>
-        let host = "smartxnetwork.github.io";
-        if ((host == window.location.host) && (window.location.protocol != "https:"))
-            window.location.protocol = "https";
-    </script>
-
 </head>
 
 <body>
 
-<div id="header" style="position:absolute; top:0px; left:0px; height:50px; right:0px;overflow:hidden;">
+<!--
+<script>
+let fs = window.RequestFileSystem || window.webkitRequestFileSystem;
+if (!fs) {
+console.log("check failed?");
+} else {
+fs(
+    window.TEMPORARY,
+    100,
+    () => {},
+    alert("Hi there! You won't be able to use smartX properly in incognito mode. As soon as you close the window you lose your data and private keys." +
+        " It's highly recommended you use normal browsing window"),
+)
+}
+</script>
+-->
+
+<section id="splashScreen" class="splashScreen">
+    <h1 style="font-size: 50px; padding: 10px; top: 75px; font-weight: bolder; margin: 0px; top: 75px">
+        Welcome to the smart economy</h1>
+    <h1 style="font-size: 20px; padding: 20px; font-style: italic; margin-bottom: 50px; margin-top: 60px; width: 550px ">
+        ...powered by rules, not rulers</h1>
+    <img src="./photos/app_icon2.png" style="position: absolute; box-shadow: 0 5px 25px 5px rgba(0, 0, 0, 0.2)"/>
+    <br>
+    <p style="position: relative; margin-top: 150px; font-size: 16px">connecting you with public peer...</p>
+</section>
+
+<div id='onboardingContainer' style="width: 550px; max-height: 100%; left: 50%; transform: translate(-50%); position: relative; z-index: 1">
+
+    <div id="onboardingModal" class="modal" style="display: block">
+        <div class="modal-content" style="height: 100%; width: 100%; text-align: justify !important; background-color: white !important;">
+            <span id="onboardingOverlay" style="display: none" onclick="document.getElementById('onboardingModal').style.display ='none'" class="close">&times;</span>
+
+            <div class="mySlides fade">
+                <div class="column" style="top: 35px">
+                    <div style="background-image: linear-gradient(bisque, white); border-radius: 20px; padding: 20px; margin-bottom: 50px; margin-top: 10px">
+                        <img src="https://avatars3.githubusercontent.com/u/44389592?s=400&u=0b1b643c5ce2632dc6cf126f35adb3fd5f6f4d6a&v=4" style="height: 175px; width: 175px; box-shadow: 0 5px 25px 5px rgba(0, 0, 0, 0.2);">
+                    </div>
+                    <h1 style="font-size: 30px; padding: 5px; font-weight: bolder;">Markets, simplified and set free</h1>
+
+                    <h2 style="font-size: 18px; color: #888888; position: relative">
+                        smartX is a decentralized, peer-to-peer socio-economic system
+                        that empowers people to instantly create smart markets & contracts
+                        of any kind in the form of digital tokens and
+                        exchange value with anyone across borders, without intermediaries.
+                        <br><br>
+                        From programmable stocks to general contracts to
+                        universal payments to self-taxing incomes, everything is a breeze
+                        in a truly digital, self-sovereign economy.
+                    </h2>
+                    <p style="font-size: 14px; color: red; text-align: center">(open for business on Twitter)</p>
+
+                </div>
+            </div>
+
+            <div class="mySlides fade">
+                <div class="column" style="top: 35px">
+                    <div>
+                        <img src="./photos/invest.png">
+                    </div>
+                    <h1 style="font-size: 30px; padding: 5px; font-weight: bolder;">Digitize and trade seamlessly</h1>
+
+                    <h2 style="font-size: 18px; color: #888888; position: relative">
+                        Turn goods, services or assets into digital, programmable tokens with any
+                        pricing, supply, income distribution and compliance structure.
+                        In continuous markets, no counterparty is needed as tokens are
+                        automatically minted and burned from the market pool.
+                        <br>
+                        <button class="verificationRequests" onclick="document.getElementById('bondingCurveModal').style.display ='block'" style="position: relative; text-align: center; background-color: white; font-size: 14px">See illustration</button>
+                        <div id="bondingCurveModal" class="modal">
+                            <div class="modal-content">
+                                <span onclick="document.getElementById('bondingCurveModal').style.display ='none'" class="close">&times;</span>
+                                <div class="modal-content">
+                                    <img src="./photos/UTTP.png" style="margin-top: 10px; border-radius: 0%">
+                                    <img src="./photos/tokenMarket.png" style="margin-top: 20px; border-radius: 0%">
+                                </div>
+                            </div>
+                        </div>
+                        <br><br>
+                        Trade with ease in global, automated markets - buy/sell tokens, sign/verify contracts,
+                        make direct payments or show some real appreciation by tipping creators.
+                    </h2>
+                </div>
+            </div>
+
+            <div class="mySlides fade">
+                <div class="column" style="top: 35px">
+                    <div>
+                        <img src="./photos/extra.png">
+                    </div>
+                    <h1 style="font-size: 30px; padding: 5px; font-weight: bolder;">Own your identity and data</h1>
+
+                    <h2 style="font-size: 18px; color: #888888; position: relative">
+                        Become an e-citizen with your smartID.
+                        Verified and issued by network's existing peers, smartID acts as your
+                        digital identity with built in secure signature mechanism.
+                        <br><br>
+                        Say goodbye to annoying passwords and centralized data servers prone to breaches, each
+                        smartX peer is issued a unique public-private keypair for authentication.
+                        Keys are generated and stored on your machine so
+                        no one except you can write to your personal database.
+                    </h2>
+                </div>
+            </div>
+
+            <div class="mySlides fade">
+                <div class="column" style="top: 35px">
+                    <div>
+                        <img src="./photos/wallet.png">
+                    </div>
+                    <h1 style="font-size: 30px; padding: 5px; font-weight: bolder;">Currency for you, by you</h1>
+
+                    <h2 style="font-size: 18px; color: #888888; position: relative">
+                        Issued to every verified peer by a decentralized, virtual central bank, smartCoin acts as the
+                        native currency of smartX economy with a finite supply schedule.
+                        <br>
+                        <button class="verificationRequests" onclick="document.getElementById('smarCashModal').style.display ='block'" style="position: relative; text-align: center; background-color: white; font-size: 14px">Learn more about smartCoin</button>
+                        <div id="smarCashModal" class="modal">
+                            <div class="modal-content">
+                                <span onclick="document.getElementById('smarCashModal').style.display ='none'" class="close">&times;</span>
+                                <div class="modal-content">
+                                    <p>smartCoin is distributed directly among people and algorithmically minted
+                                        at a transparent rate when a new
+                                        peer joins the network. Early you join more you get.</p>
+                                    <img src="./photos/smartCoin.png" style="margin-top: 10px; border-radius: 0%">
+                                </div>
+                            </div>
+                        </div>
+                        <br><br>
+                        smartCoin is minted at a transparent rate and credited directly to new peers'
+                        smartX wallet in the form of daily UBI (Universal Basic Income) over a certain vesting period.
+                        Early someone joins more they get.
+                    </h2>
+                </div>
+            </div>
+
+            <div class="mySlides fade">
+                <div class="column" style="top: 35px">
+                    <div>
+                        <img src="./photos/profit.png">
+                    </div>
+                    <h1 style="font-size: 30px; padding: 5px; font-weight: bolder;">Virtual markets, real opportunities</h1>
+
+                    <h2 style="font-size: 18px; color: #888888; position: relative">
+                        smartX bridges the gap among creators, curators, consumers and market makers
+                        through a smart, open economy where everything becomes trade-able.
+                        Original creators get royalty, curators, fans and market makers get to own and invest in future,
+                        consumers get better discovery and much more.
+                        <br><br>
+                        If internet and social media helped create value, smartX helps capture and exchange value.
+                    </h2>
+                </div>
+            </div>
+
+
+            <div class="mySlides fade">
+                <div class="column" style="top: 45px">
+                    <h1 style="font-size: 30px; padding: 5px; font-weight: bolder; top: 0px;">Couldn't be easier to join the revolution...</h1>
+                    <div style="position: relative; top: 20px;">
+                        <h5 style="text-align: center; font-size: 16px"><i class="fa fa-id-card" style="color:orange; ; top: 100px; font-size:xx-large; width:100%; margin-top: 10px; margin-bottom: 10px"></i>1. Check your smartID</h5>
+                        <p style="text-align: center; padding: 5px"></p>
+                        <h5 style="text-align: center; font-size: 16px"><i class="fa fa-money" style="color:orange; font-size:xx-large; width:100%; margin-top: 10px; margin-bottom: 10px"></i>2. Get verified and claim smartCoin</h5>
+                        <p style="text-align: center ; padding: 5px"></p>
+                        <h5 style="text-align: center; font-size: 16px"><i class="fa fa-shopping-cart" style="color:orange; font-size:xx-large; width:100%; margin-top: 10px; margin-bottom: 10px"></i>3. Start verifying others and participating in markets</h5>
+                        <p style="text-align: center; padding: 5px"></p>
+                    </div>
+                    <br>
+                    <h2 style="font-size: 12px; margin-top: 5px; color: #888888">Ready to experience self-sovereignty?</h2>
+                    <button onclick="plusSlides(1)" class="btn color-2 active" style="width: 40%; margin-top: 25px; top: 450px; position: absolute">Let's do this <i class="fa fa-arrow-right"></i></button>
+
+                </div>
+            </div>
+
+            <div class="mySlides fade">
+                <div id="credentialsOnboarding" class="modal-content" style="height: 97%; width: 100%; text-align: justify !important;">
+                    <div class="text">smartX credentials</div>
+                    <hr style="position: relative; ">
+                    <p style="text-align: center">
+                        smartID is your secure and simple identity with built in digital signatures based on PKI technology.
+                        Each entry in the smartX database is signed by writing peer's corresponding keypair.
+                        It's recommended you download your private key and other credentials to avoid any accidental loss of data.</p>
+                    <p style="text-align: center; margin-top: 50px; margin-bottom: 5px">smartID</p>
+                    <hr style="border-top: 1px solid lightgrey; width: 100px; margin-top: 5px !important; margin-bottom: 5px !important">
+                    <input id="onboardingSmartID" type="text" value="" placeholder="smartID" disabled class="embossed">
+                    <br>
+
+                    <p style="text-align: center; margin-top: 75px; margin-bottom: 5px">Signature</p>
+                    <hr style="border-top: 1px solid lightgrey; width: 100px; margin-top: 5px !important;">
+                    <textarea id="onboardingSignature" placeholder="signature" disabled class="embossed"></textarea>
+                    <br>
+                    <button id="downloadCredentials" class="btn color-2 active" style="width: 40%; margin-top: 25px; top: 500px; position: absolute">Download credentials <i class="fa fa-download"></i></button>
+                </div>
+            </div>
+
+            <div class="mySlides fade">
+                <div id="videoOnboarding" class="modal-content" style="height: 97%; width: 100%; text-align: justify !important;">
+                    <div class="text">Video selfie for verification</div>
+                    <hr style="position: relative; ">
+                    <p style="text-align: center">
+                        You need to get verified from an existing peer to claim your smartCoin
+                        and start participating in network activities.
+                        If your profile is not genuine anyone in the network can challenge it's authenticity.
+                        To verify, create a short video recording in which you say last 4 characters of your smartID:
+                        <input id="videoSmartID" type="text" value="" placeholder="smartID" disabled class="embossed" style="width: 20%; font-size: 20px">
+                    </p>
+
+                    <div id="player">
+                        <video id="selfieVerification" autoplay src="placeholder.mp4" style="margin-top: 20px">
+                            Your browser does not support the video.
+                        </video>
+                        <input id="blobdata" type="hidden" value="">
+                    </div>
+
+                    <div style="margin-top: 50px; margin-bottom: 20px">
+                        <input id="videoButton" class="btn color-2 active" style="top: 500px; position: absolute" type="button" value="Record"/><i></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mySlides fade">
+                <div id="twitterOnboarding" class="modal-content" style="height: 97%; width: 100%; text-align: justify !important;">
+                    <div class="text">Submit for verification</div>
+                    <hr style="position: relative; ">
+                    <p style="text-align: center">
+                        Go ahead and submit your account for verification to someone you know who is already verified on smartX
+                        and can vouch for you by depositing some security funds. In return they can earn referral reward
+                        from system upon successful verification.
+                        Enter verifying peer's twitter handle and tweet to them with your smartID.
+                    </p>
+
+                    <div class="search-form" style="top: 350px; width: 400px; background-color: bisque">
+                        <input id="onboardingSubmit" type="search" required placeholder="enter twitter handle of verifier e.g. @abh1manyu" autofocus="autofocus" class="search-input">
+                    </div>
+
+                    <div class="social">
+                        <a class="js-social-share btn color-2 active" href="#" id="sendTweet" target="_blank" style="width: 40%; margin-top: 25px; top: 500px; position: absolute; text-decoration: none; padding: 10px;">Verify smartID <i class="fa fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mySlides fade">
+                <div id="finalOnboarding" class="column" style="top: 45px">
+                    <h1 style="font-size: 30px; padding: 5px; font-weight: bolder;">Awesome, you're all set!</h1>
+                    <div style="position: relative; top: 20px;">
+                        <h5 style="text-align: center; font-size: 14px">
+                            You'll be notified on twitter as soon as your profile is verified.
+                            Once you become member of the smartX network you can participate
+                            in market activities and enjoy being part of the virtual economy.
+                            <br><br><br>
+                            In the meantime, do share smartX among your circles.
+                            You don't want your friends and followers to miss out on the fun. And remember
+                            early someone joins more smartCoins they get! :)
+                        </h5>
+                        <p style="text-align: center; padding: 5px"></p>
+                    </div>
+                    <br>
+
+                    <div class="social">
+                        <a class="js-social-share btn color-2 active" href="#" id="shareTweet" target="_blank" style="width: 40%; margin-top: 25px; top: 450px; position: absolute; text-decoration: none; padding: 10px;">Share smartX <i class="fa fa-share-alt"></i></a>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+            <br>
+
+            <div style="text-align:center; width: 60%; left: 50%; position: absolute; bottom: 30px; transform: translate(-50%)">
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+                <span class="dot" onclick="currentSlide(4)"></span>
+                <span class="dot" onclick="currentSlide(5)"></span>
+                <span class="dot" onclick="currentSlide(6)"></span>
+                <span class="dot" onclick="currentSlide(7)"></span>
+                <span class="dot" onclick="currentSlide(8)"></span>
+                <span class="dot" onclick="currentSlide(9)"></span>
+                <span class="dot" onclick="currentSlide(10)"></span>
+            </div>
+
+        </div>
+    </div>
 </div>
 
+<div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'home')" id="defaultOpen"><i class="fa fa-fw fa-home"></i> smartX</button>
+    <button class="tablinks" onclick="openTab(event, 'profile')" id="profileOpen"><i class="fa fa-fw fa-user"></i> Profile</button>
+    <button class="tablinks" onclick="openTab(event, 'wallet')" id="walletOpen"><i class="fa fa-fw fa-money"></i> Wallet</button>
+    <button class="tablinks" onclick="openTab(event, 'market')" id="marketOpen"><i class="fa fa-fw fa-shopping-cart"></i> Market</button>
+</div>
+
+<div id="home" class="tabcontent">
+    <div class="column" style="top: 25px">
     <div>
-        <img src="https://avatars3.githubusercontent.com/u/44389592?s=400&u=0b1b643c5ce2632dc6cf126f35adb3fd5f6f4d6a&v=4" style="margin-top: 20px">
+        <img src="https://avatars3.githubusercontent.com/u/44389592?s=400&u=0b1b643c5ce2632dc6cf126f35adb3fd5f6f4d6a&v=4" style="box-shadow: 0 5px 25px 5px rgba(0, 0, 0, 0.2); height: 200px; width: 200px; margin-bottom: 25px">
     </div>
-    <div class="column">
-        <h1>Peer-to-Peer identity and monetary system for a self-sovereign society</h1>
-        <h2>For the first time in history humans can self-organize at scale without complex
-            bureaucratic processes and siloes. Using smartID and smartCash anyone can seamlessly
-            create smart contracts and markets (aka tokens) for just about anything and easily manage
-            any kind of socio-economic activities - unlocking more wealth and giving more freedom to the
-            masses. smartX is a completely serverless and permissionless system powered by IPFS based p2p technology.</h2>
+        <h1 style="font-size: 32px; padding: 5px; font-weight: bolder">Markets, simplified and set free</h1>
+<!--        <h1 style="font-size: 20px; padding: 0px; font-style: italic; margin-bottom: 20px ">Stock market for tweets</h1> !-->
 
-        <h4 style="font-size: 20px; color: #888888; text-align: center">A smart, tokenized economy</h4>
+        <h2 style="font-size: 14px; color: #888888">
+            smartX is a completely digital, decentralized
+            identity, monetary and governance system to
+            instantly create smart, automated markets and contracts for anything
+            and easily exchange value with anyone over the internet without middlemen.
+            As a totally serverless & permissionless platform built on IPFS,
+            smartX empowers people to self-organize at scale - instead of relying on
+            complex bureaucratic processes and centralized intermediaries
+            such as governments, banks & companies - to seamlessly manage market activities.
+        </h2>
 
-        <div class="hrow">
+        <button id="howitworks" class="verificationRequests btn color-2 active" onclick="document.getElementById('onboardingModal').style.display ='block'" style="position: relative; text-align: center; font-size: 14px; color: white">How it works</button>
+
+        <h4 style="font-size: 14px; color: #888888; text-align: center; margin-bottom: 15px; margin-top: 25px">
+            Your imagination is the only limitation - from universal payments to
+            issuance of tweet-stocks to siging general contracts, everything is a breeze
+            in a smart, tokenized economy.
+        </h4>
+
+        <hr style="border-top: 1px solid lightgrey; width: 100px; margin-top: 0px !important; margin-bottom: 10px !important">
+
+
+        <div class="hrow" style="top: 0px">
 
             <div class="hcolumn">
                 <div class="card">
-                    <i class="fa fa-exchange" style="color:orange; font-size: large; width:100%; margin-top: 5px"></i>
-                    <h4>Markets</h4>
+                    <i class="fa  fa-credit-card-alt" style="color:orange; font-size: large; width:100%; margin-top: 5px"></i>
+                    <h4>Payments</h4>
+                    <p>Use currency of the internet to buy things, pay others or tip on social networks</p>
+                </div>
+            </div>
+            <div class="hcolumn">
+                <div class="card">
+                    <i class="fa fa-id-card" style="color:orange; font-size: large; width:100%; margin-top: 5px"></i>
+                    <h4>Verifications</h4>
+                    <p>Provide your digital native smartID as proof of identity anywhere</p>
+                </div>
+            </div>
+            <div class="hcolumn">
+                <div class="card">
+                    <i class="fa fa-line-chart" style="color:orange; font-size: large; width:100%; margin-top: 5px"></i>
+                    <h4>Assets</h4>
                     <p>Invest in a tweet, trade reddit meme or bet on video's popularity</p>
                 </div>
             </div>
@@ -74,53 +386,56 @@
             </div>
             <div class="hcolumn">
                 <div class="card">
-                    <i class="fa  fa-credit-card-alt" style="color:orange; font-size: large; width:100%; margin-top: 5px"></i>
-                    <h4>Payments</h4>
-                    <p>Buy a photo on insta, pay to chat on messenger or tip on anyone's blog</p>
+                    <i class="fa  fa-file-text" style="color:orange; font-size: large; width:100%; margin-top: 5px"></i>
+                    <h4>Agreements</h4>
+                    <p>Draft legal agreements for all needs, from employment to rental</p>
                 </div>
             </div>
             <div class="hcolumn">
                 <div class="card">
-                    <i class="fa  fa-file-text" style="color:orange; font-size: large; width:100%; margin-top: 5px"></i>
-                    <h4>Agreements</h4>
-                    <p>Draft legal agreements of any kind from employment to rental</p>
+                    <i class="fa fa-calculator" style="color:orange; font-size: large; width:100%; margin-top: 5px"></i>
+                    <h4>Taxes</h4>
+                    <p>Simple, universal subscription of basic social services for all</p>
                 </div>
             </div>
-
+            <div class="hcolumn">
+                <div class="card">
+                    <i class="fa fa-check-square" style="color:orange; font-size: large; width:100%; margin-top: 5px"></i>
+                    <h4>Voting</h4>
+                    <p>Seamless direct democracy on issues of community interest</p>
+                </div>
+            </div>
         </div>
-
-
-        <h4 style="font-size: 20px; color: #888888; text-align: center">How it works</h4>
-        <h5 style="text-align: center"><i class="fa fa-id-card" style="color:orange; font-size:xx-large; width:100%; margin-top: 10px"></i> Set up your smartID</h5>
-        <p style="text-align: center">Get your secure and simple smart identity with built in digital signatures based on PKI technology. Each individual is issued a unique public-private keypair that acts as
-            their identifier and password for authentication. Each entry in the smartX database is signed by writing peer's corresponding keypair. Complete your profile including social handles to showcase your true self.</p>
-        <h5 style="text-align: center"><i class="fa fa-money" style="color:orange; font-size:xx-large; width:100%; margin-top: 10px"></i> Get verified and claim your smartCash</h5>
-        <p style="text-align: center">Once you've created your account you need to get verified from an existing verified
-            peer to claim your smartCash and start participating in network activities. Monetary supply is fixed in smartX network but unlike other hard cryptocurrencies it's given directly to people and only minted at a transparent rate when a new verified peer joins the network. Early you join more you get.
-        </p>
-        <h5 style="text-align: center"><i class="fa fa-shopping-cart" style="color:orange; font-size:xx-large; width:100%; margin-top: 10px"></i> Start verifying others and participating in markets</h5>
-        <p style="text-align: center">Now you can start verifying your friends and keep earning 2.5% per verification (verify only those you personally know else you risk losing all your wealth). Soon you'll be able to create, explore and trade tokens for any kind of digital good - from tweets to videos to memes - with built in incentive and compliance rules.</p>
 
         <hr>
 
         <h4 style="font-size: 20px; color: #888888;">FAQs</h4>
         <h5>Why smartX matters?</h5>
-        <p>World economy is ruled by intermediaries - companies, governments, banks - with too much power and incentives in the hands of a few; making only rich, richer.
+        <p>World economy is ruled by intermediaries - companies, governments, banks - with too
+            much power and incentives in the hands of a few; making only rich, richer.
 
-            Value creation opportunities have been limited for average joe and far too much value is lost due to inefficiency created by poor and complex socio-economic models such as inflationary monetary policies, unaccountable governance, bureaucratic red tapes, interface proliferation, data hoarding to name a few.
-
+            Value creation opportunities have been limited for average joe and
+            far too much value is lost due to inefficiency created by poor and
+            complex socio-economic models such as inflationary monetary policies,
+            unaccountable governance, bureaucratic red tapes, interface proliferation,
+            data hoarding to name a few.
+            <br><br>
             "The last crisis did not hit us despite the presence of our monetary and
             financial authorities. It hit us because of them."
             <br><br>
-            smartX wants to change this with “social capitalism” where everyone has an opportunity to be a solopreneur on top of a unified system.
-
-            Mission is to build a smart, truly digital self-sovereign society that empowers everyone in the world to seamlessly manage any kind of socio-economic activities; unlocking more wealth and giving more freedom to the masses.
+            smartX wants to change this with “social capitalism” where everyone
+            has an opportunity to be a solopreneur on top of a unified socio-economic system.
+            <br><br>
+            Mission is to build a smart, truly digital and self-sovereign society - managed by rules,
+            not controlled by rulers - that empowers people to seamlessly manage market activities;
+            unlocking more value/wealth and giving more freedom to the masses.
             <br><br>
             If internet and social media helped create value, smartX will help capture and exchange value.
         </p>
 
         <h5>Who can join smartX?</h5>
-        <p>SmartX is like a global village where everyone is welcome - from an unbanked person in Kenya to a banker on Wall st anyone is free to join and participate. smartX bridges the gap among
+        <p>SmartX is like a global village where everyone is welcome - from an unbanked person in Kenya to a banker
+            on Wall st, anyone is free to join and participate. smartX bridges the gap among
             creators, curators, consumers
             and market makers through a smart open economy where value is captured from everything.
             <br><br>
@@ -129,28 +444,29 @@
             invest in future, consumers get better discovery and much more.
         </p>
         <h5>Why do I need to get verified?</h5>
-        <p>smartX is a purely peer to peer system i.e. no central party like Government, Bank or Company controls it.
-            So in order to protect everyone's wealth and make sure each individual receives smartCash only once. </p>
+        <p>smartID acts as your digital native ID card/passport that is issued to you when you join the network.
+            smartX is a purely peer to peer system i.e. no central party like Government, Bank or Company controls it.
+            Verification is mandatory in order to avoid spoofing of identities and make sure each individual receives smartCoin only once. </p>
         <h5>What's the reward-risk with verification?</h5>
         <p>The system simply relies on incentive/mechanism design principles to function. If you behave as per
-            rules you get rewarded (e.g. 2.5% of smartCash of each peer you verify comes back to you)
+            rules you get rewarded (e.g. 0.5% of smartCoin of each peer you verify comes back to you)
             but if you try to perform malice by verifying fake peers you not only lose all your wealth and
-            reputation but also end up diluting the value of smartCash.</p>
-        <h5>How is smartCash minted and issued?</h5>
-        <p>smartCash is minted as per natural log based token minting function.
-            <img src="https://pbs.twimg.com/media/DpzRNeaUYAAqi6T.jpg:large" style="max-width: 500px !important; max-height: 250px !important; border-radius: 0%; margin-top: 10px; box-shadow: none; margin-bottom: 10px;">
+            reputation but also end up diluting the value of smartCoin.</p>
+        <h5>How is smartCoin minted and issued?</h5>
+        <p>smartCoin is minted as per natural log based token minting function.
+            <img src="./photos/smartCoin.png" style="max-width: 500px !important; max-height: 250px !important; border-radius: 0%; margin-top: 10px; box-shadow: none; margin-bottom: 10px;">
             Not only it makes experience
             frictionless & viral but also offers a fair way to distribute money. Anyone can tell right now how
             much a billionth member will get with certainty!
             With this model we're pretty much guaranteed to see supply proportional to network growth / utility.
         </p>
         <h5>Is my private data secure?</h5>
-        <p>All your sensitive data e.g. private keys, ID proof etc. never leaves your machine and seen by anyone. However
-            you must ensure safety of your machine and browser storage.</p>
+        <p>All your sensitive data e.g. private keys, ID proof etc. never leaves your machine. However
+            you must ensure safety of your machine and keys storage.</p>
         <h5>Who owns and runs smartX?</h5>
         <p>smartX is meant to be open source application/DAO built on a suite of simple protocols and features to build a smart, truly digital economy.
             Anyone who wants to give real wealth, freedom and power back to people is welcome to join and contribute to the endeavor.</p>
-        <h5>How can I use smartCash?</h5>
+        <h5>How can I use smartCoin?</h5>
         <p>As internet's socio-economic layer, smartX will help you invest in a tweet, trade memes on reddit, create contracts on house,
             request college degrees, buy a photo on insta, watch a premium video on youtube, pay to chat on messenger or simply tip on anyone's blog!</p>
         <h5>How to create smartItems / tokens?</h5>
@@ -158,10 +474,370 @@
             IPFS based universal token & transfer protocol. Anyone can basically create tokens representing any underlying good (in the form of url), pricing mechanism, incentive structure and compliance rules.
             When someone buys that token not only they own that item but also automatically benefit from baked in incentives and follow associated regulatory mechanism.
 
-            <img src="https://pbs.twimg.com/media/DqGhu86UUAETHGw.jpg:large" style="max-width: 500px !important; max-height: 250px !important; border-radius: 0%; margin-top: 10px; box-shadow: none; margin-bottom: 10px;">
+            <img src="./photos/UTTP.png" style="max-width: 500px !important; max-height: 250px !important; border-radius: 0%; margin-top: 10px; box-shadow: none; margin-bottom: 10px;">
+            <button class="verificationRequests" id="forcedSync">Sync account</button>
+    </div>
+</div>
+
+<div id="profile" class="tabcontent">
+
+    <div class="search-form">
+        <input id="findID" type="search" required placeholder="search by smartID..." autofocus="autofocus" class="search-input">
+        <button id ="open" class="search-button color-2">
+            Go <i class="fa fa-arrow-right"></i></button>
+    </div>
+    <br>
+    <div id="status"></div>
+    <br>
+
+    <div id='requests' style="width: 450px;">
+
+    <button class="verificationRequests" onclick="document.getElementById('requestsModal').style.display ='block'">See verification requests</button>
+    <span class="fa fa-bell" style="visibility:hidden; color: orangered; display: inline-block; float: left; font-size: x-small; margin-top: 5px"></span>
+
+    <div id="requestsModal" class="modal">
+        <div class="modal-content">
+            <span onclick="document.getElementById('requestsModal').style.display ='none'" class="close">&times;</span>
+
+            <h2 style="color: gray; margin-bottom: 10px; margin-top: 5px">Requests from friends</h2>
+            <div id="friendRequests"></div>
+            <hr style="border-top: 1px solid lightgrey; width: 400px; margin-top: 25px !important; margin-bottom: 20px !important">
+            <h2 style="color: gray; margin-bottom: 10px; margin-top: 5px">Requests from network</h2>
+            <div id="networkRequests"></div>
+        </div>
+    </div>
+
+    </div>
+
+    <div id="user">
+
+        <p style="text-align: center; margin-bottom: 5px">smartID</p>
+        <hr style="border-top: 1px solid lightgrey; width: 100px; margin-top: 0px !important; margin-bottom: 0px !important">
+        <input type="text" id="smartID" value="" placeholder="smartID" disabled class="embossed" style="margin-top: 0px !important; margin-bottom: 15px !important; font-size: 14px"><br>
+
+        <div id="savedPlayer">
+            <video id="selfie" autoplay src="placeholder.mp4">
+                Your browser does not support the video.
+            </video>
+        </div>
+
+        <div id='verifiedBy' class="uncheck"><i class="fa fa-check"></i></div>
+
+        <input type="text" id="name" placeholder="What is your name?" style="font-size: 18px; margin-top: 20px; background-color: #f1f1f1" required>
+
+        <textarea id="bio" placeholder="Share a bit about yourself..." style="font-size: 14px; color: grey" maxlength="200" required></textarea>
+
+        <div class="social">
+            <a class="js-social-share" href="#" id="twitter" target="_blank"><i class="fa fa-twitter"></i></a>
+        </div>
+
+        <p style="text-align: center; margin-top: 25px; margin-bottom: 5px">Signature</p>
+        <hr style="border-top: 1px solid lightgrey; width: 100px; margin-top: 0px !important;">
+        <textarea id="signature" placeholder="signature" disabled class="embossed" style="margin-top: 0px; width:100%; font-size: 12px;
+        height: 75px !important;">
+     </textarea>
+
+    </div>
+
+    <div id="accountAction">
+
     </div>
 
 </div>
+
+<div id="wallet" class="tabcontent">
+
+    <div class="hrow">
+        <div class="hcolumn" style="width: 100%; height: 100px">
+            <div class="card" style="height: 100px" >
+                <p>smartCoin balance</p>
+                <input disabled id="_balance" value="" style="width: 70%; ">
+            </div>
+        </div>
+    </div>
+
+    <div class="hrow" style="display: -webkit-box; text-align: -webkit-left; margin-top:15px">
+        <p>Total issued</p>
+        <input disabled id="_issued" value="" style="width: 50%; padding: 0px">
+        <p>Daily bonus</p>
+        <input disabled id="_dailyBonus" value="" style="width: 50%; padding: 0px">
+    </div>
+    <br>
+
+    <div class="hrow">
+        <div class="hcolumn" style="width: 50%; height: 100px">
+            <div class="card" style="height: 100px" >
+                <p>Verification security deposit</p>
+                <input disabled id="_deposit" value="" style="width: 70%; font-size: 20px">
+            </div>
+        </div>
+        <div class="hcolumn" style="width: 50%; height: 100px">
+            <div class="card" style="height: 100px" >
+                <p>Pending verification reward</p>
+                <input disabled id="_reward" value="" style="width: 70%; font-size: 20px">
+            </div>
+        </div>
+    </div>
+
+    <div style="position: relative; top: 75px;">
+        <p style="text-align: center; margin-top: 10px; margin-bottom: 5px">Transactions</p>
+        <hr style="border-top: 1px solid lightgrey; width: 100px; margin-top: 5px !important; margin-bottom: 5px !important">
+        <div class="scrollit" style="position: relative;">
+        <table id="transactions" style="width:500px; border: none">
+            <col width="25%" >
+            <col width="65%" >
+            <col width="10%" >
+        </table>
+        </div>
+    </div>
+
+   <div>
+    <button class="btn" style="position: absolute; bottom: 60px; width: 200px;" onclick="document.getElementById('payment').style.display='block'">Send 💲</i></button>
+    <div id="payment" class="w3-modal">
+        <span onclick="document.getElementById('payment').style.display ='none'" class="close">&times;</span>
+        <h2 style="color: gray; margin-bottom: 10px; margin-bottom: 0px; ">Send smartCoin</h2>
+        <hr style="border-top: 1px solid lightgrey; width: 300px; margin-bottom: 10px; margin-top: 0px !important;">
+        <input id="paymentTo" type="text" placeholder="smartID of peer..." required style="background-color: white; margin-bottom: 10px">
+
+        <input id="paymentAmount" type="number" placeholder="Enter amount..." required style="background-color: white">
+
+        <button id="paymentSent" class="btn">Send </button>
+    </div>
+   </div>
+
+</div>
+
+<div id="market" class="tabcontent">
+
+    <div id="tokensList">
+
+    </div>
+
+    <div id="tokenModal" class="modal" style="display: block; visibility: hidden; position: absolute; height: -webkit-fill-available">
+        <div id="tokenDetail" class="modal-content charts" style="width: 475px; height: 525px; padding: 0px">
+            <span onclick="document.getElementById('tokenModal').style.display ='none'" class="close">&times;</span>
+
+        </div>
+    </div>
+
+    <div id="tokenPurchase" class="w3-modal" style="z-index: 1; position:absolute;">
+        <span onclick="document.getElementById('tokenPurchase').style.display ='none'" class="close">&times;</span>
+        <h2 style="color: gray; margin-bottom: 10px;">Buy token</h2>
+        <hr style="border-top: 1px solid lightgrey; width: 300px; margin-bottom: 10px; margin-top: 0px !important;">
+        <input id="paymentToTokenID" type="text" placeholder="smartID of peer..." required style="background-color: white; margin-bottom: 10px">
+
+        <input id="paymentAmountToTokenID" type="number" placeholder="Enter number of tokens to buy..." required style="background-color: white">
+
+        <button id="paymentSentToTokenID" class="btn">Buy </button>
+    </div>
+
+    <div id="tokenSell" class="w3-modal" style="z-index: 1; position:absolute;">
+        <span onclick="document.getElementById('tokenSell').style.display ='none'" class="close">&times;</span>
+        <h2 style="color: gray; margin-bottom: 10px;">Sell token</h2>
+        <hr style="border-top: 1px solid lightgrey; width: 300px; margin-bottom: 10px; margin-top: 0px !important;">
+        <input id="paymentFromTokenID" type="text" placeholder="smartID of peer..." required style="background-color: white; margin-bottom: 10px">
+
+        <input id="paymentAmountFromTokenID" type="number" placeholder="Enter number of tokens to sell..." required style="background-color: white">
+
+        <button id="paymentSentFromTokenID" class="btn">Sell </button>
+    </div>
+
+</div>
+
+<script>
+
+    let video = document.querySelector('video');
+    video.muted = true;
+    let videoButton = document.getElementById('videoButton');
+    const constraints = {
+        video:  {width: {ideal: 350}, height: {ideal: 250}, facingMode: "User"},
+        audio:  { echoCancellation: true, autoGainControl: true, noiseSuppression: true, channelCount: 1}
+    };
+    const chunks = []
+    let onDataAvailable = (e) => {
+        chunks.push(e.data)
+    }
+    videoButton.onclick = async () => {
+        navigator.mediaDevices.getUserMedia ( constraints ).then ( ( mediaStream ) => {
+            let recorder = new MediaRecorder ( mediaStream )
+            recorder.ondataavailable = onDataAvailable
+            recorder.start ()
+            video.srcObject = mediaStream
+            videoButton.setAttribute ( "value" , "Stop" )
+            videoButton.onclick = async () => {
+                if (videoButton.value === 'Re-record') {
+                    video.remove ();
+                    let newVideo = document.createElement ( "VIDEO" );
+                    document.getElementById ( "player" ).appendChild ( newVideo );
+                    video = document.querySelector('video')
+                    await recorder.start ()
+                    video.muted = true;
+                    video.srcObject = mediaStream
+                    video.play ()
+                    videoButton.setAttribute ( "value" , "Stop" )
+                } else if (videoButton.value === 'Stop') {
+                    recorder.stop ()
+                    recorder.onstop = ( e ) => {
+                        //         let tracks = mediaStream.getTracks ()
+                        //         tracks.forEach ( function ( track ) {
+                        //           track.stop ();
+//          } );
+                        console.log ( 'e' , e )
+                        let blob = chunks[ chunks.length - 1 ]
+                        let url = URL.createObjectURL ( blob )
+                        console.log('blobsize:', blob.size)
+                        console.log(url)
+
+                        let reader = new FileReader();
+                        reader.readAsDataURL(blob)
+                        reader.onloadend = function () {
+                            const base64data = reader.result
+                            if (base64data.includes('data:video/x-matroska;codecs=avc1,opus;base64,')) {
+                                document.getElementById( "blobdata" ).value = base64data.replace( 'data:video/x-matroska;codecs=avc1,opus;base64,' , '' )
+                            } else if (base64data.includes('data:video/webm;codecs=vp8,opus;base64,')) {
+                                document.getElementById( "blobdata" ).value = base64data.replace( 'data:video/webm;codecs=vp8,opus;base64,' , '' )
+                            }
+                        }
+
+                        video.remove ();
+                        let newVideo = document.createElement ( "VIDEO" );
+                        document.getElementById ( "player" ).appendChild ( newVideo );
+                        video = document.querySelector('video')
+                        video.src = url
+                        video.play ()
+                        videoButton.setAttribute ( "value" , "Re-record" )
+                    }
+                }
+            }
+        }).catch ( function ( err ) {
+            console.log ( 'error' , err )
+        })
+    }
+</script>
+
+<script>
+
+    let socialShares = document.querySelectorAll(".js-social-share");
+    if (socialShares) {
+        [].forEach.call(socialShares, function(anchor) {
+            anchor.addEventListener("click", function(e) {
+                e.preventDefault();
+
+                if (this.id === 'sendTweet') {
+                    const href = 'https://twitter.com/intent/tweet/?text=Hey ' +
+                        document.getElementById( 'onboardingSubmit' ).value + ' , can you please verify my smartID? \n'
+                        + ' \n cc smartXbot verify ' + document.getElementById( 'onboardingSmartID' ).value
+
+                    if (!document.getElementById( 'onboardingSubmit' ).value) {
+                        alert( "No twitter ID entered. Your verification request could not be submitted." )
+                    } else if (!document.getElementById( "blobdata" ).value ) {
+                        alert( 'Not able to submit. Make sure you have recorded a video selfie.' )
+                    } else {
+                        windowPopup( href , 600 , 400 );
+                    }
+                } else if (this.id === 'shareTweet') {
+                    const href = 'https://twitter.com/intent/tweet/?text=I just created my smartID and became an e-citizen! Claim yours now to become part of the virtual, self-sovereign world!'
+                    windowPopup( href , 600 , 400 );
+                }
+            });
+        })
+    }
+
+    function windowPopup(url, width, height) {
+        // Calculate the position of the popup so
+        // it’s centered on the screen.
+        let left = (screen.width / 2) - (width / 2);
+        //     let  top = (screen.height / 2) - (height / 2);
+        window.open(
+            url,
+            "",
+            "menubar=no,toolbar=no,resizable=yes,scrollbars=yes,width=" + width + ",height=" + height + ",top=" + top + ",left=" + left
+        );
+    }
+
+    function verificationPostUrl (id) {
+        let proof = prompt ( `Please enter address of your ${id} account`, "https://twitter.com/" );
+        if (proof != null) {
+            document.getElementById ( id ).setAttribute("href", proof);
+            document.getElementById ( id ).style.color = "Orange";
+            return false
+        }
+    }
+</script>
+
+<script>
+    function openTab(evt, tabName) {
+        // Declare all variables
+        let i, tabcontent, tablinks;
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+
+        document.getElementById('onboardingModal').style.display ='none'
+    }
+</script>
+
+<script>
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target === document.getElementById('requestsModal')) {
+            document.getElementById('requestsModal').style.display = "none";
+        }
+    }
+</script>
+
+<script>
+    var slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+        var i;
+        var slides = document.getElementsByClassName("mySlides");
+        var dots = document.getElementsByClassName("dot");
+        if (n > slides.length) {slideIndex = 1}
+        if (n < 1) {slideIndex = slides.length}
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex-1].style.display = "block";
+        dots[slideIndex-1].className += " active";
+    }
+</script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
+<script type="text/javascript" src="lib/orbitdb.js" charset="utf-8"></script>
+<script type="text/javascript" src="lib/ipfs.js" charset="utf-8"></script>
+<script type="text/javascript" src="index.js" charset="utf-8"></script>
+
+<script>
+
+    smartX()
+    document.getElementById("howitworks").click()
+
+</script>
+
 
 </body>
 </html>
