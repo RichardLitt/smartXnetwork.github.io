@@ -293,13 +293,13 @@ const smartX = ( IPFS , ORBITDB ) => {
 
             if (await publicAccount.get('verifiedMembers').members === 0) {
                 hashes.verifyingPeer = await myAccount.put( 'verifyingPeer' , {
-                    smartID : mySmartID ,
+                    smartID : '' ,
                     securityDeposit : '' ,
                     pendingReward : '' ,
-                    status : 'verified'
+                    status : 'pending'
                 } );
 
-                console.log( 'As genesis peer, your account is automatically verified' )
+              //  console.log( 'As genesis peer, your account is automatically verified' )
             } else {
                 hashes.verifyingPeer = await myAccount.put( 'verifyingPeer' , {
                     smartID : '' ,
