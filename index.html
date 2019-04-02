@@ -252,6 +252,7 @@ fs(
 
                     <div class="social">
                         <a class="js-social-share btn color-2 active" href="#" id="sendTweet" target="_blank" style="width: 40%; margin-top: 25px; top: 500px; position: absolute; text-decoration: none; padding: 10px;">Verify smartID <i class="fa fa-twitter"></i></a>
+                        <h2 style="font-size: 10px; margin-top: 10px; color: #888888; top: 350px">Do not modify tweet text.</h2>
                     </div>
                 </div>
             </div>
@@ -262,8 +263,9 @@ fs(
                     <div style="position: relative; top: 20px;">
                         <h5 style="text-align: center; font-size: 14px">
                             You'll be notified on twitter as soon as your profile is verified.
-                            Once you become member of the smartX network you can participate
-                            in market activities and enjoy being part of the virtual economy.
+                            Once you become member of the smartX network you will be able to
+                            check your profile, wallet and participate
+                            in market activities.
                             <br><br><br>
                             In the meantime, do share smartX among your circles.
                             You don't want your friends and followers to miss out on the fun. And remember
@@ -712,56 +714,6 @@ fs(
         }).catch ( function ( err ) {
             console.log ( 'error' , err )
         })
-    }
-</script>
-
-<script>
-
-    let socialShares = document.querySelectorAll(".js-social-share");
-    if (socialShares) {
-        [].forEach.call(socialShares, function(anchor) {
-            anchor.addEventListener("click", function(e) {
-                e.preventDefault();
-
-                if (this.id === 'sendTweet') {
-                    const href = 'https://twitter.com/intent/tweet/?text=Hey ' +
-                        document.getElementById( 'onboardingSubmit' ).value + ' , can you please verify my smartID? \n'
-                        + ' \n cc smartXbot verify ' + document.getElementById( 'onboardingSmartID' ).value
-
-                    if (!document.getElementById( 'onboardingSubmit' ).value) {
-                        alert( "No twitter ID entered. Your verification request could not be submitted." )
-                    } else if (!document.getElementById( "blobdata" ).value ) {
-                        alert( 'Not able to submit. Make sure you have recorded a video selfie.' )
-                    } else {
-                        windowPopup( href , 600 , 400 );
-                    }
-                } else if (this.id === 'shareTweet') {
-                    const href = 'https://twitter.com/intent/tweet/?text=I just created my smartID and became an e-citizen! Claim yours now to become part of the virtual, self-sovereign world!'
-                    windowPopup( href , 600 , 400 );
-                }
-            });
-        })
-    }
-
-    function windowPopup(url, width, height) {
-        // Calculate the position of the popup so
-        // it’s centered on the screen.
-        let left = (screen.width / 2) - (width / 2);
-        //     let  top = (screen.height / 2) - (height / 2);
-        window.open(
-            url,
-            "",
-            "menubar=no,toolbar=no,resizable=yes,scrollbars=yes,width=" + width + ",height=" + height + ",top=" + top + ",left=" + left
-        );
-    }
-
-    function verificationPostUrl (id) {
-        let proof = prompt ( `Please enter address of your ${id} account`, "https://twitter.com/" );
-        if (proof != null) {
-            document.getElementById ( id ).setAttribute("href", proof);
-            document.getElementById ( id ).style.color = "Orange";
-            return false
-        }
     }
 </script>
 

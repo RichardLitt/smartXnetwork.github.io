@@ -256,11 +256,6 @@ const smartX = ( IPFS , ORBITDB ) => {
                 }
                 else if (data.type === 'twitterVerification') {
                     await updateTwitter( data.entry.twitter, data.entry.name, data.entry.bio );
-                    myAccount.get('state').proof = await myAccount.put('proof', document.getElementById( "blobdata" ).value)
-                    await myAccount.put('state', myAccount.get('state'))
-                        .then(async (hash) => await sendStateToPublicAccount(hash).then(() => {
-                            console.log('updated proof in account')
-                        }))
                     console.log( `updated twitter handle and added video proof: ${data.entry.twitter}` )
                     if (data.entry.verifyingPeer !== mySmartID) {
                         await submitForVerification( data.entry.verifyingPeer )
@@ -1084,42 +1079,45 @@ const smartX = ( IPFS , ORBITDB ) => {
 
                         document.getElementById( 'bio' ).value = entries.bio
 
-                        document.getElementById( 'twitter' ).href = await socialUrl()
+                        document.getElementById( 'twitter' ).href = await socialUrl(smartID)
                         document.getElementById( 'twitter' ).style.color = 'orange'
 
-                        await taxDistribution()
+                        if (smartID === mySmartID) {
 
-                        let balance = await smartCoinBalance()
-                        document.getElementById( '_balance' ).value = '💲' + balance.toFixed( 2 )
-                        const pending = entries.peersVerified.filter( x => x.status === 'pending' );
-                        const securityDeposit = pending.reduce( ( total , transaction ) => total + transaction.securityDeposit , 0 )
-                        const pendingReward = pending.reduce( ( total , transaction ) => total + transaction.pendingReward , 0 )
-                        document.getElementById( '_deposit' ).value = '💲' + securityDeposit.toFixed( 2 )
-                        document.getElementById( '_reward' ).value = '💲' + pendingReward.toFixed( 2 )
+                            await taxDistribution()
 
-                        const alreadyMinted = await minting()
-                        document.getElementById( '_issued' ).value = alreadyMinted.vested > 0 ?
-                            '💲 ' + alreadyMinted.issued.toFixed( 2 ) : '💲' + 0
-                        document.getElementById( '_dailyBonus' ).value = alreadyMinted.vested > 0 ?
-                            '💲 ' + alreadyMinted.dailyBonus.toFixed( 2 ) : '💲' + 0
+                            let balance = await smartCoinBalance()
+                            document.getElementById( '_balance' ).value = '💲' + balance.toFixed( 2 )
+                            const pending = entries.peersVerified.filter( x => x.status === 'pending' );
+                            const securityDeposit = pending.reduce( ( total , transaction ) => total + transaction.securityDeposit , 0 )
+                            const pendingReward = pending.reduce( ( total , transaction ) => total + transaction.pendingReward , 0 )
+                            document.getElementById( '_deposit' ).value = '💲' + securityDeposit.toFixed( 2 )
+                            document.getElementById( '_reward' ).value = '💲' + pendingReward.toFixed( 2 )
 
-                        await myAccount.get( 'transactions' ).forEach( ( transaction ) => {
-                            if (transaction.to) {
-                                let i = document.createElement( 'tr' )
-                                let l = document.createElement('td')
-                                let j = document.createElement( 'td' )
-                                let k = document.createElement( 'td' )
-                                i.setAttribute( "id" , transaction.timestamp )
-                                let txnDate = new Date(transaction.timestamp)
-                                l.appendChild(document.createTextNode(txnDate.toDateString()))
-                                j.appendChild( document.createTextNode( transaction.message ) )
-                                k.appendChild( document.createTextNode( transaction.unit === 'smartCoin' ? '💲' + transaction.amount.toFixed(2) : transaction.amount.toFixed(2) ))
-                                i.appendChild(l)
-                                i.appendChild(j)
-                                i.appendChild(k)
-                                document.getElementById( 'transactions' ).appendChild( i )
-                            }
-                        } )
+                            const alreadyMinted = await minting()
+                            document.getElementById( '_issued' ).value = alreadyMinted.vested > 0 ?
+                                '💲 ' + alreadyMinted.issued.toFixed( 2 ) : '💲' + 0
+                            document.getElementById( '_dailyBonus' ).value = alreadyMinted.vested > 0 ?
+                                '💲 ' + alreadyMinted.dailyBonus.toFixed( 2 ) : '💲' + 0
+
+                            await myAccount.get( 'transactions' ).forEach( ( transaction ) => {
+                                if (transaction.to) {
+                                    let i = document.createElement( 'tr' )
+                                    let l = document.createElement( 'td' )
+                                    let j = document.createElement( 'td' )
+                                    let k = document.createElement( 'td' )
+                                    i.setAttribute( "id" , transaction.timestamp )
+                                    let txnDate = new Date( transaction.timestamp )
+                                    l.appendChild( document.createTextNode( txnDate.toDateString() ) )
+                                    j.appendChild( document.createTextNode( transaction.message ) )
+                                    k.appendChild( document.createTextNode( transaction.unit === 'smartCoin' ? '💲' + transaction.amount.toFixed( 2 ) : transaction.amount.toFixed( 2 ) ) )
+                                    i.appendChild( l )
+                                    i.appendChild( j )
+                                    i.appendChild( k )
+                                    document.getElementById( 'transactions' ).appendChild( i )
+                                }
+                            } )
+                        }
                     }
                 } catch ( e ) {
                     console.error( e )
@@ -1194,10 +1192,9 @@ const smartX = ( IPFS , ORBITDB ) => {
                         alert( "You can not directly request oracle to verify you. Your request could not be submitted." )
                     } else {
                         if (publicAccount.get( 'index' )[ friendID ].status === 'verified') {
-                            if (document.getElementById( "blobdata" ).value) {
-                                submitToFriend( friendID ).then(  () => {
-                                    alert( "Verification request has been submitted to your friend." )
-                                } )
+                            if (myAccount.get('proof') !== null || '') {
+                                await submitToFriend( friendID )
+                                console.log( 'Verification request has been submitted to your friend.' )
                             } else {
                                 alert( 'Not able to submit. Make sure you have recorded a video selfie.' )
                             }
@@ -1486,7 +1483,7 @@ const smartX = ( IPFS , ORBITDB ) => {
             a.click ()
         }
 
-        async function socialUrl () {
+        async function socialUrl (smartID) {
             console.log('loading twitter value...')
             let socialUrl;
             if (myAccount.get('social') === undefined || !myAccount.get('social').twitter) {
@@ -1495,7 +1492,7 @@ const smartX = ( IPFS , ORBITDB ) => {
                     + ' \n smartXbot verify ' + document.getElementById( 'onboardingSmartID' ).value
                 return socialUrl
             } else {
-                let socialUrl = 'https://twitter.com/' + myAccount.get('social').twitter
+                let socialUrl = 'https://twitter.com/' + publicAccount.get('index')[smartID].twitter
                 return socialUrl
             }
         }
@@ -1559,6 +1556,49 @@ const smartX = ( IPFS , ORBITDB ) => {
                 alert('Your request could not be processed. Amount sold has to be more than 0')
             }
         })
+
+        let socialShares = document.querySelectorAll(".js-social-share");
+        if (socialShares) {
+            [].forEach.call(socialShares, function(anchor) {
+                anchor.addEventListener("click", async function(e) {
+                    e.preventDefault();
+
+                    if (this.id === 'sendTweet') {
+                        const href = 'https://twitter.com/intent/tweet/?text=Hey ' +
+                            document.getElementById( 'onboardingSubmit' ).value + ' , can you please verify my smartID? \n'
+                            + ' cc smartXbot verify ' + document.getElementById( 'onboardingSmartID' ).value
+
+                        if (!document.getElementById( 'onboardingSubmit' ).value) {
+                            alert( "No twitter ID entered. Your verification request could not be submitted." )
+                        } else if (!document.getElementById( "blobdata" ).value && myAccount.get('proof') === null ) {
+                            alert( 'Not able to submit. Make sure you have recorded a video selfie.' )
+                        } else {
+                            if (myAccount.get('proof') === null) {
+                                myAccount.get( 'state' ).proof = await myAccount.put( 'proof' , document.getElementById( "blobdata" ).value )
+                                await myAccount.put( 'state' , myAccount.get( 'state' ) )
+                                console.log( 'proof added to account' )
+                            }
+                            windowPopup( href , 600 , 400 );
+                        }
+                    } else if (this.id === 'shareTweet') {
+                        const href = 'https://twitter.com/intent/tweet/?text=I just created my smartID and became an e-citizen! Claim yours now to become part of the virtual, self-sovereign world!'
+                        windowPopup( href , 600 , 400 );
+                    }
+                });
+            })
+        }
+
+        function windowPopup(url, width, height) {
+            // Calculate the position of the popup so
+            // it’s centered on the screen.
+            let left = (screen.width / 2) - (width / 2);
+            //     let  top = (screen.height / 2) - (height / 2);
+            window.open(
+                url,
+                "",
+                "menubar=no,toolbar=no,resizable=yes,scrollbars=yes,width=" + width + ",height=" + height + ",top=" + top + ",left=" + left
+            );
+        }
 
         setTimeout(async () => await openAccount(mySmartID), 1000)
     } )
