@@ -400,7 +400,7 @@ const smartX = ( IPFS , ORBITDB ) => {
 
             const alreadyMinted = await minting()
             const minted = alreadyMinted.vested
-            console.log('minted: ', minted )
+            //console.log('minted: ', minted )
 
             const pending = myAccount.get( 'peersVerified' ).filter( x => x.status === 'pending' )
             const rewarded = myAccount.get( 'peersVerified' ).filter( x => x.status === 'verified' )
@@ -409,20 +409,20 @@ const smartX = ( IPFS , ORBITDB ) => {
             const smartCoinTransactions = myAccount.get('transactions').filter(x => x.unit === 'smartCoin')
 
             const securityDeposit = pending.reduce( ( total , transaction ) => total + transaction.securityDeposit , 0 )
-            console.log( `securityDeposit: ${securityDeposit}` )
+            //console.log( `securityDeposit: ${securityDeposit}` )
             const pendingReward = pending.reduce( ( total , transaction ) => total + transaction.pendingReward , 0 )
-            console.log( `pendingReward: ${pendingReward}` )
+            //console.log( `pendingReward: ${pendingReward}` )
             const rewardWon = rewarded.reduce( ( total , transaction ) => total + transaction.pendingReward , 0 )
-            console.log( `rewardWon: ${rewardWon}` )
+            //console.log( `rewardWon: ${rewardWon}` )
             const securityLost = lost.reduce( ( total , transaction ) => total + transaction.securityDeposit , 0 )
-            console.log( `securityLost: ${securityLost}` )
+            //console.log( `securityLost: ${securityLost}` )
             const challengeReward = challenged.reduce( ( total , transaction ) => total + transaction.reward , 0 )
-            console.log( `challengeReward: ${challengeReward}` )
+            //console.log( `challengeReward: ${challengeReward}` )
             const transactionsBalance = smartCoinTransactions.reduce( ( total , transaction ) => total + transaction.amount , 0 )
-            console.log( `transactionsBalance: ${transactionsBalance}` )
+            //console.log( `transactionsBalance: ${transactionsBalance}` )
 
             const smartCoin = minted - securityDeposit + rewardWon - securityLost + challengeReward + transactionsBalance
-            console.log( 'smartCoin: ' , smartCoin )
+            //console.log( 'smartCoin: ' , smartCoin )
             return smartCoin
         }
 
@@ -442,13 +442,15 @@ const smartX = ( IPFS , ORBITDB ) => {
             const taxAlreadyPaid = taxTransactions ? Math.abs(taxTransactions) : 0
             let taxToBePaid = taxDeductionOnMinted + taxDeductionOnRoyaltyIncome + taxDeductionOnTipIncome - taxAlreadyPaid
 
-            console.log( `taxDeductionOnMinted: ${taxDeductionOnMinted}, 
-            taxDeductionOnRoyaltyIncome: ${taxDeductionOnRoyaltyIncome}, 
-            taxDeductionOnTipIncome: ${taxDeductionOnTipIncome},
-            taxAlreadyPaid: ${taxAlreadyPaid}, 
-            taxToBePaid: ${taxToBePaid}` )
+            if (taxToBePaid > 100) {
+                console.log(
+                    `taxDeductionOnMinted: ${taxDeductionOnMinted}, 
+                    taxDeductionOnRoyaltyIncome: ${taxDeductionOnRoyaltyIncome}, 
+                    taxDeductionOnTipIncome: ${taxDeductionOnTipIncome},
+                    taxAlreadyPaid: ${taxAlreadyPaid}, 
+                    taxToBePaid: ${taxToBePaid}`
+                )
 
-            if (taxToBePaid > 0) {
                 const socialServices = publicAccount.get('socialServices')
                 const taxPerService = taxToBePaid / (Object.entries(socialServices).length)
                 console.log(Object.values(socialServices))
@@ -468,7 +470,7 @@ const smartX = ( IPFS , ORBITDB ) => {
                 }
                 console.log( 'tax credited to all smartX social service providers' )
             } else {
-                console.log( 'no taxes due at this time' )
+                console.log( 'no dues at this time' )
             }
         }
 
@@ -1289,7 +1291,7 @@ const smartX = ( IPFS , ORBITDB ) => {
                     tokenAccounts.push(x)
                 }
             }
-            console.log('token accounts: ', tokenAccounts)
+            //console.log('token accounts: ', tokenAccounts)
 
             //for each token account get data and create chart listener
 
