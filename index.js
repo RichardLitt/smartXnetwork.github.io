@@ -1039,7 +1039,7 @@ const smartX = ( IPFS , ORBITDB ) => {
                 document.getElementById('splashScreen').style.display = 'none'
             }
 
-            if (!entries || !entries.proof || !entries.social.twitter && smartID === mySmartID && entries.verifyingPeer === 'pending') {
+            if (!entries || !entries.proof || !entries.social.twitter || entries.verifyingPeer === 'pending' && smartID === mySmartID ) {
                 console.log('onboarding not completed yet...')
                 document.getElementById('onboardingOverlay').style.display = 'none'
             } else {
