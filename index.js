@@ -1578,7 +1578,9 @@ const smartX = ( IPFS , ORBITDB ) => {
                             if (myAccount.get('proof') === null) {
                                 myAccount.get( 'state' ).proof = await myAccount.put( 'proof' , document.getElementById( "blobdata" ).value )
                                 await myAccount.put( 'state' , myAccount.get( 'state' ) )
-                                console.log( 'proof added to account' )
+                                    .then(async (hash) => await sendStateToPublicAccount(hash).then(() => {
+                                        console.log('updated video selfie proof in own and public account')
+                                    }))
                             }
                             windowPopup( href , 600 , 400 );
                         }
