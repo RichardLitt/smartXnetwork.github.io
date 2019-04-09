@@ -82,6 +82,8 @@ const smartX = ( IPFS , ORBITDB ) => {
                 }
             }
 
+            setTimeout(async () => await openAccount(mySmartID), 1000)
+
             if (publicAccount.get('index')[mySmartID] === undefined || publicAccount.get('index')[mySmartID].peers === undefined) {
                 console.log('peerID-smartID mapping not present so adding...')
                 let dataObj = {
@@ -1604,6 +1606,5 @@ const smartX = ( IPFS , ORBITDB ) => {
             );
         }
 
-        setTimeout(async () => await openAccount(mySmartID), 1000)
     } )
 }
