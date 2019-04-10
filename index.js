@@ -1595,13 +1595,13 @@ const smartX = ( IPFS , ORBITDB ) => {
                                             console.log( 'updated video selfie proof in own and public account' )
                                         } ) )
                                 }
-                                const friendID = await twitterIDToSmartID(document.getElementById( 'onboardingSubmit' ).value)
+                                const twitterID = document.getElementById( 'onboardingSubmit' ).value.split('@')[1].toLowerCase()
+                                const friendID = await twitterIDToSmartID(twitterID)
                                 if ( friendID !== undefined && publicAccount.get( 'index' )[ friendID ].status === 'verified') {
                                     windowPopup( href , 600 , 400 );
                                 } else {
-                                    alert( 'Your verification request could not be submitted as chosen peer ' +
-                                        'is either not available or verified. ' +
-                                        'Please submit your request to a friend already verified on smartX.' )
+                                    alert( 'Your verification request could not be submitted. ' +
+                                        'Please submit your request to a friend already verified on smartX using their @twitterhandle.' )
                                 }
                             } else {
                                 alert('smartX\'s network is facing higher than usual traffic at the moment. ' +
