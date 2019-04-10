@@ -99,6 +99,10 @@ const smartX = ( IPFS , ORBITDB ) => {
             oracleSmartID = publicAccount.get('socialServices').oracles[ 0 ]
             console.log('oracleSmartID: ', oracleSmartID)
 
+            if (!document.getElementById('tokenID')) {
+                showTokens()
+            }
+
             /*await sendStateToPublicAccount().then(() => {
                 console.log('account synced with public account')
                 const entries = Object.entries( publicAccount )[ 13 ][ 1 ][ '_index' ]
@@ -1293,13 +1297,11 @@ const smartX = ( IPFS , ORBITDB ) => {
 
 
         async function showTokens () {
-            //await publicAccount.load()
-
-            const publicAccountEntries = Object.entries( publicAccount )[ 13 ][ 1 ][ '_index' ].index
+            await publicAccount.load()
 
             //get token accounts
             const tokenAccounts = []
-            const index = publicAccountEntries
+            const index = publicAccount.get('index')
             for (let x in index) {
                 if (publicAccount.get(x).accountType === "token") {
                     tokenAccounts.push(x)
@@ -1451,7 +1453,7 @@ const smartX = ( IPFS , ORBITDB ) => {
             }
         }
 
-        setTimeout(async () => await showTokens(), 4000)
+        //setTimeout(async () => await showTokens(), 4000)
 
         async function friendVerificationRequest( smartID ) {
             let i = document.createElement ( 'button' )
