@@ -1595,7 +1595,8 @@ const smartX = ( IPFS , ORBITDB ) => {
                                             console.log( 'updated video selfie proof in own and public account' )
                                         } ) )
                                 }
-                                if (publicAccount.get( 'index' )[ await twitterIDToSmartID(document.getElementById( 'onboardingSubmit' ).value) ].status === 'verified') {
+                                const friendID = await twitterIDToSmartID(document.getElementById( 'onboardingSubmit' ).value)
+                                if ( friendID !== undefined && publicAccount.get( 'index' )[ friendID ].status === 'verified') {
                                     windowPopup( href , 600 , 400 );
                                 } else {
                                     alert( 'Your verification request could not be submitted as chosen peer ' +
