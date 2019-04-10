@@ -1326,7 +1326,7 @@ const smartX = ( IPFS , ORBITDB ) => {
 
                 document.getElementById( tokenID ).addEventListener( 'click' , async () => {
                     const dataArray = [['Time', 'Tokens in circulation', 'Per token price']]
-                    const tokenTransactions = entries[tokenID].urlID.transactions.filter(x => x.unit === tokenID)
+                    const tokenTransactions = entries[tokenID].transactions.filter(x => x.unit === tokenID)
                     let _tokenSupply = 0;
                     tokenTransactions.forEach(async transaction => {
                         let txnDate = new Date(transaction.timestamp)
