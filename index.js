@@ -99,10 +99,6 @@ const smartX = ( IPFS , ORBITDB ) => {
             oracleSmartID = publicAccount.get('socialServices').oracles[ 0 ]
             console.log('oracleSmartID: ', oracleSmartID)
 
-            if (!document.getElementById('tokenID')) {
-                showTokens(publicAccountEntries)
-            }
-
             /*await sendStateToPublicAccount().then(() => {
                 console.log('account synced with public account')
                 const entries = Object.entries( publicAccount )[ 13 ][ 1 ][ '_index' ]
@@ -1296,20 +1292,19 @@ const smartX = ( IPFS , ORBITDB ) => {
         await displayRequests()
 
 
-        async function showTokens (entries) {
-            //await publicAccount.load()
-
+        async function
+        () {
+            await publicAccount.load()
 
             //get token accounts
             const tokenAccounts = []
-            const index = entries.index
+            const index = publicAccount.get('index')
             for (let x in index) {
-                console.log('account: ', x, entries[x])
-                if (entries[x].accountType === "token") {
+                if (publicAccount.get(x).accountType === "token") {
                     tokenAccounts.push(x)
                 }
             }
-            //console.log('token accounts: ', tokenAccounts)
+            console.log('token accounts: ', tokenAccounts)
 
             //for each token account get data and create chart listener
 
@@ -1321,14 +1316,14 @@ const smartX = ( IPFS , ORBITDB ) => {
                 i.appendChild( document.createTextNode( 'tokenID: ' + tokenID  ))
                 let j = document.createElement('div')
                 j.setAttribute('class', 'tweet')
-                console.log(entries[tokenID].urlID)
-                j.setAttribute('id', entries[tokenID].urlID)
+                console.log(publicAccount.get(tokenID).urlID)
+                j.setAttribute('id', publicAccount.get(tokenID).urlID)
                 i.appendChild(j)
                 document.getElementById( 'tokensList' ).appendChild( i )
 
                 document.getElementById( tokenID ).addEventListener( 'click' , async () => {
                     const dataArray = [['Time', 'Tokens in circulation', 'Per token price']]
-                    const tokenTransactions = entries[tokenID].transactions.filter(x => x.unit === tokenID)
+                    const tokenTransactions = publicAccount.get(tokenID).transactions.filter(x => x.unit === tokenID)
                     let _tokenSupply = 0;
                     tokenTransactions.forEach(async transaction => {
                         let txnDate = new Date(transaction.timestamp)
@@ -1455,7 +1450,7 @@ const smartX = ( IPFS , ORBITDB ) => {
             }
         }
 
-        //setTimeout(async () => await showTokens(), 4000)
+        setTimeout(async () => await showTokens(), 4000)
 
         async function friendVerificationRequest( smartID ) {
             let i = document.createElement ( 'button' )
