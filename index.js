@@ -1303,7 +1303,7 @@ const smartX = ( IPFS , ORBITDB ) => {
             const tokenAccounts = []
             const index = entries.index
             for (let x in index) {
-                if (publicAccount.get(x).accountType === "token") {
+                if (entries[x].accountType === "token") {
                     tokenAccounts.push(x)
                 }
             }
@@ -1319,14 +1319,14 @@ const smartX = ( IPFS , ORBITDB ) => {
                 i.appendChild( document.createTextNode( 'tokenID: ' + tokenID  ))
                 let j = document.createElement('div')
                 j.setAttribute('class', 'tweet')
-                console.log(publicAccount.get(tokenID).urlID)
-                j.setAttribute('id', publicAccount.get(tokenID).urlID)
+                console.log(entries[tokenID].urlID)
+                j.setAttribute('id', entries[tokenID].urlID)
                 i.appendChild(j)
                 document.getElementById( 'tokensList' ).appendChild( i )
 
                 document.getElementById( tokenID ).addEventListener( 'click' , async () => {
                     const dataArray = [['Time', 'Tokens in circulation', 'Per token price']]
-                    const tokenTransactions = publicAccount.get(tokenID).transactions.filter(x => x.unit === tokenID)
+                    const tokenTransactions = entries[tokenID].urlID.transactions.filter(x => x.unit === tokenID)
                     let _tokenSupply = 0;
                     tokenTransactions.forEach(async transaction => {
                         let txnDate = new Date(transaction.timestamp)
