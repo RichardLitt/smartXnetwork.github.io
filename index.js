@@ -100,7 +100,7 @@ const smartX = ( IPFS , ORBITDB ) => {
             console.log('oracleSmartID: ', oracleSmartID)
 
             if (!document.getElementById('tokenID')) {
-                showTokens()
+                showTokens(publicAccountEntries)
             }
 
             /*await sendStateToPublicAccount().then(() => {
@@ -1296,12 +1296,12 @@ const smartX = ( IPFS , ORBITDB ) => {
         await displayRequests()
 
 
-        async function showTokens () {
-            await publicAccount.load()
+        async function showTokens (entries) {
+            //await publicAccount.load()
 
             //get token accounts
             const tokenAccounts = []
-            const index = publicAccount.get('index')
+            const index = entries.index
             for (let x in index) {
                 if (publicAccount.get(x).accountType === "token") {
                     tokenAccounts.push(x)
