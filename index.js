@@ -1298,11 +1298,12 @@ const smartX = ( IPFS , ORBITDB ) => {
 
         async function showTokens (entries) {
             //await publicAccount.load()
-            console.log('entries:', entries)
+
 
             //get token accounts
             const tokenAccounts = []
             const index = entries.index
+            console.log('index:', index)
             for (let x in index) {
                 if (entries[x].accountType === "token") {
                     tokenAccounts.push(x)
