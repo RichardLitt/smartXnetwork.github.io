@@ -82,8 +82,6 @@ const smartX = ( IPFS , ORBITDB ) => {
                 }
             }
 
-            setTimeout(async () => await openAccount(mySmartID), 1000)
-
             if (publicAccount.get('index')[mySmartID] === undefined || publicAccount.get('index')[mySmartID].peers === undefined) {
                 console.log('peerID-smartID mapping not present so adding...')
                 let dataObj = {
@@ -1016,6 +1014,17 @@ const smartX = ( IPFS , ORBITDB ) => {
             return total
         }
 
+        async function twitterIDToSmartID (twitterID) {
+            let smartID;
+            let index = publicAccount.get( 'index' );
+            for (let x in index) {
+                if (index[ x ].twitter === twitterID) {
+                    return smartID = x
+                }
+            }
+            return smartID
+        }
+
 
         ////////////
         ////////////
@@ -1284,6 +1293,7 @@ const smartX = ( IPFS , ORBITDB ) => {
 
 
         async function showTokens () {
+            await publicAccount.load()
 
             //get token accounts
             const tokenAccounts = []
@@ -1573,18 +1583,29 @@ const smartX = ( IPFS , ORBITDB ) => {
                             + ' cc smartXbot verify ' + document.getElementById( 'onboardingSmartID' ).value
 
                         if (!document.getElementById( 'onboardingSubmit' ).value) {
-                            alert( "No twitter ID entered. Your verification request could not be submitted." )
+                            alert( "Please enter twitter ID of verifier and tweet to them." )
                         } else if (!document.getElementById( "blobdata" ).value && myAccount.get('proof') === null ) {
-                            alert( 'Not able to submit. Make sure you have recorded a video selfie.' )
+                            alert( 'Please record a video selfie to submit verification request.' )
                         } else {
-                            if (myAccount.get('proof') === null) {
-                                myAccount.get( 'state' ).proof = await myAccount.put( 'proof' , document.getElementById( "blobdata" ).value )
-                                await myAccount.put( 'state' , myAccount.get( 'state' ) )
-                                    .then(async (hash) => await sendStateToPublicAccount(hash).then(() => {
-                                        console.log('updated video selfie proof in own and public account')
-                                    }))
+                            if (await publicAccount.get(mySmartID) && await myAccount.get('proof') !== undefined) {
+                                if (myAccount.get( 'proof' ) === null) {
+                                    myAccount.get( 'state' ).proof = await myAccount.put( 'proof' , document.getElementById( "blobdata" ).value )
+                                    await myAccount.put( 'state' , myAccount.get( 'state' ) )
+                                        .then( async ( hash ) => await sendStateToPublicAccount( hash ).then( () => {
+                                            console.log( 'updated video selfie proof in own and public account' )
+                                        } ) )
+                                }
+                                if (publicAccount.get( 'index' )[ await twitterIDToSmartID(document.getElementById( 'onboardingSubmit' ).value) ].status === 'verified') {
+                                    windowPopup( href , 600 , 400 );
+                                } else {
+                                    alert( 'Your verification request could not be submitted as chosen peer ' +
+                                        'is either not available or verified. ' +
+                                        'Please submit your request to a friend already verified on smartX.' )
+                                }
+                            } else {
+                                alert('smartX\'s network is facing higher than usual traffic at the moment. ' +
+                                    'Please keep this tab open and try again in a few minutes. Sorry for the inconvenience.')
                             }
-                            windowPopup( href , 600 , 400 );
                         }
                     } else if (this.id === 'shareTweet') {
                         const href = 'https://twitter.com/intent/tweet/?text=I just created my smartID and became an e-citizen! Claim yours now to become part of the virtual, self-sovereign world!'
@@ -1605,6 +1626,8 @@ const smartX = ( IPFS , ORBITDB ) => {
                 "menubar=no,toolbar=no,resizable=yes,scrollbars=yes,width=" + width + ",height=" + height + ",top=" + top + ",left=" + left
             );
         }
+
+        setTimeout(async () => await openAccount(mySmartID), 2500)
 
     } )
 }
