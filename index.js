@@ -1609,7 +1609,7 @@ const smartX = ( IPFS , ORBITDB ) => {
                             }
                         }
                     } else if (this.id === 'shareTweet') {
-                        const href = 'https://twitter.com/intent/tweet/?text=I just created my smartID and became an e-citizen! Claim yours now to become part of the virtual, self-sovereign world!'
+                        const href = `https://twitter.com/intent/tweet/?text=Yay! I just created my smartID and became an e-citizen of the virtual, self-sovereign economy, smartX! \n I can now verify you so claim your smartID and smartCoins right away and join me in the movement to simplify and democratize markets.`
                         windowPopup( href , 600 , 400 );
                     }
                 });
