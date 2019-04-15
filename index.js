@@ -175,8 +175,10 @@ const smartX = ( IPFS , ORBITDB ) => {
 
         async function pendingChange( topic, data ) {
             oracleSmartID = data.oracleSmartID
-            
-            if (data.to === mySmartID || data.to === myAccount.get('social').twitter) {
+            const publicAccountkey = '04a06c7212e67b42eb52cfa151223df06b5b0b4b9dd7c9da004e66e4dde2a202ea0a12963d3ab635c2c32253154f74ef89bbb1e7b6cc10c40219cc0b373c77be64'
+            const pubKey = await orbitdb.keystore.importPublicKey(publicAccountkey)
+
+            if (await orbitdb.keystore.verify(data.signature, pubKey, data.entryHash) && data.to === mySmartID || data.to === myAccount.get('social').twitter) {
                 console.log( `there are some pending changes for...` , mySmartID , data )
 
                 if (data.type === 'verificationRequestedFromFriend') {
@@ -1053,6 +1055,13 @@ const smartX = ( IPFS , ORBITDB ) => {
             if (!entries || !entries.proof || !entries.social.twitter || entries.verifyingPeer === 'pending' && smartID === mySmartID ) {
                 console.log('onboarding not completed yet...')
                 document.getElementById('onboardingOverlay').style.display = 'none'
+                let titleText = ['tweets', 'memes', 'videos', 'blogs', 'music', 'games', 'letters', 'podcasts', 'anything']
+                let title = document.getElementById('titleText')
+                let i = 0;
+                setInterval(() => {
+                    title.removeChild( title.childNodes[ 0 ] );
+                    title.appendChild( document.createTextNode(titleText[i]) )
+                    i === titleText.length - 1 ? i = titleText.length - 1 : i++ }, 2000)
             } else {
                 document.getElementById('onboardingOverlay').style.display = 'block'
                 document.getElementById('onboardingModal').style.display ='none'
