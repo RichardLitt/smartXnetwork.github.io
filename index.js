@@ -178,7 +178,7 @@ const smartX = ( IPFS , ORBITDB ) => {
             const publicAccountkey = '04a06c7212e67b42eb52cfa151223df06b5b0b4b9dd7c9da004e66e4dde2a202ea0a12963d3ab635c2c32253154f74ef89bbb1e7b6cc10c40219cc0b373c77be64'
             const pubKey = await orbitdb.keystore.importPublicKey(publicAccountkey)
 
-            if (await orbitdb.keystore.verify(data.signature, pubKey, data.entryHash) && data.to === mySmartID || data.to === myAccount.get('social').twitter) {
+            if (await orbitdb.keystore.verify(data.signature, pubKey, data.entryHash) && (data.to === mySmartID || data.to === myAccount.get('social').twitter)) {
                 console.log( `there are some pending changes for...` , mySmartID , data )
 
                 if (data.type === 'verificationRequestedFromFriend') {
