@@ -174,94 +174,85 @@ const smartX = ( IPFS , ORBITDB ) => {
         }
 
         async function pendingChange( topic, data ) {
-            oracleSmartID = data.oracleSmartID
-            const publicAccountkey = '04a06c7212e67b42eb52cfa151223df06b5b0b4b9dd7c9da004e66e4dde2a202ea0a12963d3ab635c2c32253154f74ef89bbb1e7b6cc10c40219cc0b373c77be64'
-            const pubKey = await orbitdb.keystore.importPublicKey(publicAccountkey)
+            if (data.by === publicSmartID) {
+                oracleSmartID = data.oracleSmartID
+                const publicAccountkey = '04a06c7212e67b42eb52cfa151223df06b5b0b4b9dd7c9da004e66e4dde2a202ea0a12963d3ab635c2c32253154f74ef89bbb1e7b6cc10c40219cc0b373c77be64'
+                const pubKey = await orbitdb.keystore.importPublicKey( publicAccountkey )
 
-            if (await orbitdb.keystore.verify(data.signature, pubKey, data.entryHash) && (data.to === mySmartID || data.to === myAccount.get('social').twitter)) {
-                console.log( `there are some pending changes for...` , mySmartID , data )
+                if (await orbitdb.keystore.verify( data.signature , pubKey , data.entryHash ) && (data.to === mySmartID || data.to === myAccount.get( 'social' ).twitter)) {
+                    console.log( `there are some pending changes for...` , mySmartID , data )
 
-                if (data.type === 'verificationRequestedFromFriend') {
-                    const arr = myAccount.get( 'friendVerificationRequests' )
-                    console.log( `received verification request from: ${data.from}` )
-                    if (arr.find( x => x.smartID === data.from ) === undefined) {
-                        arr.push( { smartID : data.from, ID: myAccount.get('state').friendVerificationRequests } )
-                        myAccount.get('state').friendVerificationRequests = await myAccount.put( 'friendVerificationRequests' , arr )
-                        await myAccount.put('state', myAccount.get('state'))
-                            .then(async (hash) => await sendStateToPublicAccount(hash).then(() => {
-                                console.log('added your new account to public account')
-                            }))
-                        console.log( 'pending friend requests: ' , arr )
-                        await friendVerificationRequest( data.from )
-                    }
-                }
-                else if (data.type === 'verifiedByFriend') {
-                    await verifiedByFriend( data )
-                    console.log( `verified by Friend: ${data.from}` )
-                }
-                else if (data.type === 'verifiedByOracle') {
-                    await verifiedByOracle( data )
-                    console.log( `verified by Oracle: ${data.from}` )
-                }
-                else if (data.type === 'rewardForVerification') {
-                    if (mySmartID !== oracleSmartID) {
-                        await reward( data )
-                        console.log( `rewarded for verifying: ${data.from}` )
-                    }
-                }
-                else if (data.type === 'verificationRejectedByFriend') {
-                    await rejectedByFriend( data )
-                    console.log( `rejected by friend: ${data.from}` )
-                }
-                else if (data.type === 'verificationRejectedByOracle') {
-                    await rejectedByOracle( data )
-                    console.log( `rejected by Oracle: ${data.from}` )
-                }
-                else if (data.type === 'penaltyForVerification') {
-                    if (mySmartID !== oracleSmartID) {
-                        await penalty( data )
-                        console.log( `lost for wrongly verifying: ${data.from}` )
-                    }
-                }
-                else if (data.type === 'rewardForChallenge') {
-                    await challengerReward( data )
-                    console.log( `won for successfully challenging: ${data.from}` )
-                }
-                else if (data.type === 'challengeResolved') {
-                    await challengeResolved( data )
-                    console.log( `challenge resolved for: ${data.from}` )
-                }
-                else if (data.type === 'rejectedByPeer') {
-                    if (mySmartID !== oracleSmartID) {
-                        await rejectedByPeer( data )
-                        console.log( `challenged by peer: ${data.from}` )
-                    } else {
+                    if (data.type === 'verificationRequestedFromFriend') {
+                        const arr = myAccount.get( 'friendVerificationRequests' )
+                        console.log( `received verification request from: ${data.from}` )
+                        if (arr.find( x => x.smartID === data.from ) === undefined) {
+                            arr.push( {
+                                smartID : data.from ,
+                                ID : myAccount.get( 'state' ).friendVerificationRequests
+                            } )
+                            myAccount.get( 'state' ).friendVerificationRequests = await myAccount.put( 'friendVerificationRequests' , arr )
+                            await myAccount.put( 'state' , myAccount.get( 'state' ) )
+                                .then( async ( hash ) => await sendStateToPublicAccount( hash ).then( () => {
+                                    console.log( 'added your new account to public account' )
+                                } ) )
+                            console.log( 'pending friend requests: ' , arr )
+                            await friendVerificationRequest( data.from )
+                        }
+                    } else if (data.type === 'verifiedByFriend') {
+                        await verifiedByFriend( data )
+                        console.log( `verified by Friend: ${data.from}` )
+                    } else if (data.type === 'verifiedByOracle') {
+                        await verifiedByOracle( data )
+                        console.log( `verified by Oracle: ${data.from}` )
+                    } else if (data.type === 'rewardForVerification') {
+                        if (mySmartID !== oracleSmartID) {
+                            await reward( data )
+                            console.log( `rewarded for verifying: ${data.from}` )
+                        }
+                    } else if (data.type === 'verificationRejectedByFriend') {
+                        await rejectedByFriend( data )
+                        console.log( `rejected by friend: ${data.from}` )
+                    } else if (data.type === 'verificationRejectedByOracle') {
+                        await rejectedByOracle( data )
+                        console.log( `rejected by Oracle: ${data.from}` )
+                    } else if (data.type === 'penaltyForVerification') {
+                        if (mySmartID !== oracleSmartID) {
+                            await penalty( data )
+                            console.log( `lost for wrongly verifying: ${data.from}` )
+                        }
+                    } else if (data.type === 'rewardForChallenge') {
+                        await challengerReward( data )
+                        console.log( `won for successfully challenging: ${data.from}` )
+                    } else if (data.type === 'challengeResolved') {
+                        await challengeResolved( data )
+                        console.log( `challenge resolved for: ${data.from}` )
+                    } else if (data.type === 'rejectedByPeer') {
+                        if (mySmartID !== oracleSmartID) {
+                            await rejectedByPeer( data )
+                            console.log( `challenged by peer: ${data.from}` )
+                        } else {
+                            await networkVerificationRequest( data.from )
+                            console.log( `received verification request from: ${data.from}` )
+                        }
+                    } else if (data.type === 'transaction') {
+                        await receiveValue( data.entry )
+                        console.log( `received money from: ${data.from}` )
+                    } else if (data.type === 'token') {
+                        await sendValue( data.entry.to , data.entry.amount , data.entry.message , data.entry.unit )
+                        console.log( `bought/sold token: ${data.entry.to}` )
+                    } else if (data.type === 'twitterTip') {
+                        await sendValue( data.entry.to , data.entry.amount , data.entry.message , data.entry.unit );
+                        console.log( `sent tip on twitter to: ${data.entry.to}` )
+                    } else if (data.type === 'submittedToNetwork' && mySmartID !== data.entry.verifyingPeer) {
                         await networkVerificationRequest( data.from )
                         console.log( `received verification request from: ${data.from}` )
-                    }
-                }
-                else if (data.type === 'transaction') {
-                    await receiveValue( data.entry )
-                    console.log( `received money from: ${data.from}` )
-                }
-                else if (data.type === 'token') {
-                    await sendValue( data.entry.to , data.entry.amount , data.entry.message, data.entry.unit )
-                    console.log( `bought/sold token: ${data.entry.to}` )
-                }
-                else if (data.type === 'twitterTip') {
-                    await sendValue( data.entry.to , data.entry.amount , data.entry.message, data.entry.unit );
-                    console.log( `sent tip on twitter to: ${data.entry.to}` )
-                }
-                else if (data.type === 'submittedToNetwork' && mySmartID !== data.entry.verifyingPeer) {
-                    await networkVerificationRequest( data.from )
-                    console.log( `received verification request from: ${data.from}` )
-                }
-                else if (data.type === 'twitterVerification') {
-                    await updateTwitter( data.entry.twitter, data.entry.name, data.entry.bio );
-                    console.log( `updated twitter handle and added video proof: ${data.entry.twitter}` )
-                    if (data.entry.verifyingPeer !== mySmartID) {
-                        await submitForVerification( data.entry.verifyingPeer )
-                        console.log( 'checking account for verification...' )
+                    } else if (data.type === 'twitterVerification') {
+                        await updateTwitter( data.entry.twitter , data.entry.name , data.entry.bio );
+                        console.log( `updated twitter handle and added video proof: ${data.entry.twitter}` )
+                        if (data.entry.verifyingPeer !== mySmartID) {
+                            await submitForVerification( data.entry.verifyingPeer )
+                            console.log( 'checking account for verification...' )
+                        }
                     }
                 }
             }
@@ -1637,7 +1628,7 @@ const smartX = ( IPFS , ORBITDB ) => {
             );
         }
 
-        setTimeout(async () => await openAccount(mySmartID), 2500)
+        setTimeout(async () => await openAccount(mySmartID), 1000)
 
     } )
 }
